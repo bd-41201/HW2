@@ -52,6 +52,13 @@ plot(gt20dwn ~ FRSTHO, data=homes,
 # Residual deviance: 13715  on 15549  degrees of freedom
 # But the R2 is low ~.04
 
+# Does the presence of factories affect value?
+# png('home_near_factory.png')
+# plot(log(VALUE+1)~ECOM2,data=homes,xlab="Factory or other industrial within 1/2 block?",ylab="Home Value (Log Transformation)")
+# dev.off()
+
+# Yes, the close proximity of a factory appears to have a negative impact on home value.
+
 ## Q2
 # regress log(VALUE) on everything except AMMORT and LPRICE
 pricey <- glm(log(VALUE) ~ .-AMMORT-LPRICE, data=homes)
