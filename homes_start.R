@@ -95,6 +95,9 @@ new_model_R2 <- 1 - pricey.2$deviance/pricey.2$null.deviance
 
 pricey.gt20dwn <- glm(gt20dwn ~ .-AMMORT-LPRICE, data=homes, family="binomial")
 
+# Interpret effects for 1st home buyers and # of bathrooms.
+
+
 ## Q4
 # this is your training sample
 gt100 <- which(homes$VALUE>1e5)
