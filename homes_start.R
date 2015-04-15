@@ -101,7 +101,22 @@ new_model_R2 <- 1 - pricey.2$deviance/pricey.2$null.deviance
 pricey.gt20dwn <- glm(gt20dwn ~ .-AMMORT-LPRICE, data=homes, family="binomial")
 
 # Interpret effects for 1st home buyers and # of bathrooms.
+# For # of bathrooms
+# b<-as.numeric(pricey.gt20dwn$coef["BATHS"])
+# ~> [1] 0.2445396
+# exp(b)
+# ~> [1] 1.277033
+# More BATHs multiplies the odds of greater than 20% down payment by 1.277
 
+# For 1st home buyers
+# f <- as.numeric(pricey.gt20dwn$coef["FRSTHOY"])
+# ~> [1] -0.3699814
+# exp(f)
+# ~> [1] 0.6907472
+# Being a first time home buyer multiplies the odds of greater than 20% down payment by 0.06907
+
+# Add and describe the interaction for first time home buyers and baths.
+pricey.gt20dwn.int <- glm(gt20dwn ~ .-AMMORT-LPRICE+BATHS*FRSTHO, data=homes, family="binomial")
 
 ## Q4
 # this is your training sample
@@ -112,6 +127,15 @@ source("../Utility Scripts/deviance.R")
 ybar <- mean(homes$gt20dwn[-gt100]==TRUE)
 D0 <- deviance(y=homes$gt20dwn[-gt100], pred=ybar, family="binomial")
 
+# Train the model from q3 on the sample
+q3.train <- glm(gt20dwn ~ .-AMMORT-LPRICE+BATHS*FRSTHO,data=homes[gt100,],family="binomial")
 
+# Calculate the R2 for the in sample observations
+q4.predict.gt100 <- predict(q3.train,homes[gt100,],type="response")
+q4.gt100.R2 <- R2(y=homes$gt20dwn[gt100],pred=q4.predict.gt100,family="binomial")
+# ~> [1] 0.1047392
 
-
+# Calculate the R2 for the out of sample observations
+q4.predict.lt100 <- predict(q3.train,homes[-gt100,],type="response")
+q4.lt100.R2 <- R2(y=homes$gt20dwn[-gt100],pred=q4.predict.lt100,family="binomial")
+# ~> [1] 0.03520417
