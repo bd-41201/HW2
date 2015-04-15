@@ -28,12 +28,24 @@ plot(gt20dwn ~ FRSTHO, data=homes,
 ## Q2 
 # regress log(VALUE) on everything except AMMORT and LPRICE 
 pricey <- glm(log(VALUE) ~ .-AMMORT-LPRICE, data=homes)
+source("fdr.R")
+q  <- .1
+fdr_cut(pvals, q)
+winners_line <- fdr_cut(pvals, q)
+names(pvals)[pvals<winners_line]
 # extract pvalues
 pvals <- summary(pricey)$coef[-1,4]
 # example: those variable insignificant at alpha=0.2
 names(pvals)[pvals>.2]
 # you'll want to replace .2 with your FDR cutoff
 # you can use the `-AMMORT' type syntax to drop variables
+
+R2original <- cor(log(homes$VALUE),predict(pricey))^2
+priceyWinners <- glm(log(VALUE) ~ .-AMMORT-LPRICE-ECOM1-EGREEN-ELOW1-ETRANS-ODORA-PER-ZADULT, data=homes)
+R2Winners <- cor(log(homes$VALUE),predict(priceyWinners))^2
+
+print(R2)
+print(R2Winners)
 
 ## Q3: 
 # - don't forget family="binomial"!
@@ -47,7 +59,6 @@ source("deviance.R")
 
 ybar <- mean(homes$gt20dwn[-gt100]==TRUE)
 D0 <- deviance(y=homes$gt20dwn[-gt100], pred=ybar, family="binomial")
-
 
 
 
