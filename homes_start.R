@@ -59,6 +59,11 @@ plot(gt20dwn ~ FRSTHO, data=homes,
 
 # Yes, the close proximity of a factory appears to have a negative impact on home value.
 
+# Impact of number of bedrooms on value
+# png('value_vs_bedrooms.png')
+# plot(VALUE ~ factor(BEDRMS), data=homes[homes$BEDRMS<8,],col=rainbow(8),xlab="Number of Bedrooms",ylab="Home Value")
+# dev.off()
+
 ## Q2
 # regress log(VALUE) on everything except AMMORT and LPRICE
 pricey <- glm(log(VALUE) ~ .-AMMORT-LPRICE, data=homes)
