@@ -93,6 +93,8 @@ new_model_R2 <- 1 - pricey.2$deviance/pricey.2$null.deviance
 # - don't forget family="binomial"!
 # - use +A*B in forumula to add A interacting with B
 
+pricey.gt20dwn <- glm(gt20dwn ~ .-AMMORT-LPRICE, data=homes, family="binomial")
+
 ## Q4
 # this is your training sample
 gt100 <- which(homes$VALUE>1e5)
