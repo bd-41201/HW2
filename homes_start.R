@@ -64,10 +64,30 @@ plot(gt20dwn ~ FRSTHO, data=homes,
 pricey <- glm(log(VALUE) ~ .-AMMORT-LPRICE, data=homes)
 # extract pvalues
 pvals <- summary(pricey)$coef[-1,4]
+# Calculate the R2 for the full model
+full_model_R2 <- 1 - pricey$deviance/pricey$null.deviance
+# ~> [1] 0.3057124
+
+## Use fdr_cut function to determine the p value cutoff
+# source('../Utility Scripts/fdr.r')
+crit_pval <- fdr_cut(pvals,.1)
+# ~> [1] 0.07928016
 # example: those variable insignificant at alpha=0.2
-names(pvals)[pvals>.2]
+# names(pvals)[pvals>.2]
 # you'll want to replace .2 with your FDR cutoff
 # you can use the `-AMMORT' type syntax to drop variables
+
+# list of variables to drop in subsequent regression
+names(pvals)[pvals>crit_pval]
+# ~> [1] "ECOM1Y"  "EGREENY" "ELOW1Y"  "ETRANSY" "ODORAY"  "PER"     "ZADULT"
+
+# Run the regression again with smaller variable set.
+pricey.2 <- glm(log(VALUE) ~ .-AMMORT-LPRICE-ECOM1-EGREEN-ELOW1-ETRANS-ODORA-PER-ZADULT, data=homes)
+
+# Calculate the R2 for the new model
+new_model_R2 <- 1 - pricey.2$deviance/pricey.2$null.deviance
+# ~> [1] 0.3053729
+# which is about the same as above...
 
 ## Q3:
 # - don't forget family="binomial"!
