@@ -25,6 +25,33 @@ plot(gt20dwn ~ FRSTHO, data=homes,
 
 ## code hints
 
+## Q1
+# Additional plots to look at
+
+# Are first homes near transportation?
+# png('first_home_near_trans.png')
+# plot(ETRANS~FRSTHO, data=homes,col=c(2,3),
+#   + ylab="Is there a railway, airport, or 4 lane highway within 1/2 block?",xlab="Is this the buyers first home?")
+# dev.off()
+
+# First home buyers are slightly less likely to be near transportation.
+
+# Is home value correlated with income?
+# png('value_vs_hhincome.png')
+# plot(log(VALUE) ~ log(ZINC2), data=homes,xlab="Household Income (Log Transformation)",ylab="Home Value (Log Transformation)")
+# dev.off()
+
+# Graphically, it appears that there is a relatively strong positive correlation between value and household income.
+# The coefficients are significant:
+# Coefficients:
+#                Estimate Std. Error t value Pr(>|t|)
+# (Intercept)    10.279763   0.066859  153.75   <2e-16 ***
+# log(ZINC2 + 1)  0.155967   0.006016   25.93   <2e-16 ***
+
+#     Null deviance: 14308  on 15550  degrees of freedom
+# Residual deviance: 13715  on 15549  degrees of freedom
+# But the R2 is low ~.04
+
 ## Q2
 # regress log(VALUE) on everything except AMMORT and LPRICE
 pricey <- glm(log(VALUE) ~ .-AMMORT-LPRICE, data=homes)
