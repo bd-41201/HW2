@@ -49,7 +49,23 @@ print(R2Winners)
 
 ## Q3: 
 # - don't forget family="binomial"!
+TwentyPercentDown <- glm(formula = gt20dwn ~ . - AMMORT - LPRICE, family = binomial, data = homes)
+logRegression1 <- TwentyPercentDown$coef["BATHS"]
+logRegressionBaths <- TwentyPercentDown$coef["BATHS"]
+logRegressionFirstHome <- TwentyPercentDown$coef["FRSTHOY"]
+BathFactor  <- exp(logRegressionBaths)
+FirstHomeFactor  <- exp(logRegressionFirstHome)
+print(BathFactor)
+print(FirstHomeFactor)
+
 # - use +A*B in forumula to add A interacting with B
+
+priceyWinners$coef["BATHS"]
+
+
+
+
+
 
 ## Q4
 # this is your training sample
