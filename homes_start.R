@@ -1,4 +1,6 @@
 ##### ******** Mortgage and Home Sales Data ******** #####
+source("../Utility Scripts/deviance.R")
+source("../Utility Scripts/fdr.R")
 
 ## Read in the data
 homes <- read.csv("homes2004.csv")
@@ -113,16 +115,38 @@ pricey.gt20dwn <- glm(gt20dwn ~ .-AMMORT-LPRICE, data=homes, family="binomial")
 # ~> [1] -0.3699814
 # exp(f)
 # ~> [1] 0.6907472
-# Being a first time home buyer multiplies the odds of greater than 20% down payment by 0.06907
+# Being a first time home buyer multiplies the odds of greater than 20% down payment by 0.6907
 
 # Add and describe the interaction for first time home buyers and baths.
 pricey.gt20dwn.int <- glm(gt20dwn ~ .-AMMORT-LPRICE+BATHS*FRSTHO, data=homes, family="binomial")
+
+# For first home buyers
+# b.firsthome <- as.numeric(pricey.gt20dwn.int$coef["FRSTHOY"])
+# ~> [1] -0.02136922
+# exp(b.firsthome)
+# ~> [1] 0.9788575
+# Being a first home buyer multiplies the odds of greater than 20% down payment by 0.9788
+
+# For # of bathrooms
+# b.numbath <- as.numeric(pricey.gt20dwn.int$coef["BATHS"])
+# ~> [1] 0.2994036
+# exp(b.numbath)
+# ~> [1] 1.349054
+# For non first time home buyers an additional bathroom multiplies the odds of greater than 20% down payment by 1.3491
+
+# With interaction
+# b.numbath.int <- as.numeric(pricey.gt20dwn.int$coef["BATHS:FRSTHOY"])
+# ~> [1] -0.2020316
+# b.bath.frstho <- b.numbath + b.numbath.int
+# ~> [1] 0.09737208
+# exp(b.bath.frstho)
+# ~> [1] 1.10227
+# For first time home buyers an additional bathroom multiplies the odds of greater than 20% down payment by 1.1023
 
 ## Q4
 # this is your training sample
 gt100 <- which(homes$VALUE>1e5)
 # ybar and null deviance
-source("../Utility Scripts/deviance.R")
 
 ybar <- mean(homes$gt20dwn[-gt100]==TRUE)
 D0 <- deviance(y=homes$gt20dwn[-gt100], pred=ybar, family="binomial")
